@@ -1,6 +1,6 @@
 Chameleon
 ---------
-A Python Password Sprayer
+A Python Password Sprayer (Code will be up before the end of the year!)
 
 ## Table of Contents
  - [Disclaimer](#disclaimer)
@@ -40,7 +40,7 @@ order. On the network, it’ll just look like a user incorrectly entered their u
 Make sure you have GIT and PIP installed on the system!
 ```
 git clone https://github.com/parkerswierzewski/Chameleon.git
-pip -r requirements.txt
+pip install -r requirements.txt
 python3 chameleon.py -h
 ```
 You're good to go :)
