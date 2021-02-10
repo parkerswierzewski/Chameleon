@@ -23,7 +23,7 @@ Chameleon is a password sprayer that makes use of multithreading in Python. The 
 was developed for my CSEC 380 project "Is Python Faster than C: Writing a Password Sprayer 
 in Python using Multithreading." The goal of this project was to write a password sprayer 
 that was faster or as fast as Hydra (If you don't know what Hydra is you can find more about 
-it [here](https://github.com/vanhauser-thc/thc-hydra)). The results can be found on my blog post. 
+it [here](https://github.com/vanhauser-thc/thc-hydra)).
 
 Currently Chameleon only supports the following protocols:
 - SSH
