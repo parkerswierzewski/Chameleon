@@ -1,6 +1,6 @@
 Chameleon
 ---------
-A Python Password Sprayer
+A Python Password Sprayer (Code will be up soon!)
 
 ## Table of Contents
  - [Disclaimer](#disclaimer)
