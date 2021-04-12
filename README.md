@@ -55,7 +55,7 @@ Required Arguments
 | `host`   | Specifies the host, port, and protocol |
 
 For Chameleon to function as intended you'll need to specify a login and password list as well
-as specifying the host. The login and password lists should be some sort of readable text file
+as specifying the host/target. The login and password lists should be some sort of readable text file
 filled with potential usernames and passwords. Host should be in the format protocol://server:port.
 If you are specifying a target list file the host field should be in the format protocol:port.
 
@@ -67,6 +67,7 @@ Optional Arguments
 | ---      | ---         |
 | `-h`	   | Displays the help page |
 | `-t`	   | Specifies the target list |
+| `-c`	   | Specifies the amount of threads |
 | `-v`     | Toggles verbose mode on |
 
 Examples
@@ -82,11 +83,13 @@ python3 chameleon.py -t targets.txt -l login.txt -p passwords.txt ssh:22
     - Attempts credentials on SSH, port 22, against all IPv4 addresses within targets.txt
 ```
 
+Check out the [Chameleon's wiki](https://github.com/parkerswierzewski/Chameleon/wiki) page if you're still confused.
+
 Future Updates
 --------------
  - [ ] Support for IPv6 addresses and hostnames.
  - [ ] Support for more protocols (FTP, MySQL, SMTP, etc.).
- - [ ] Support for users choosing thread count.
+ - [x] Support for users choosing thread count.
  - [ ] Improve connection handling.
  - [ ] Improve argument parsing (user friendly).
  - [ ] Bug fixing
