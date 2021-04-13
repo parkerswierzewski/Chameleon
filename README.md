@@ -85,7 +85,8 @@ python3 chameleon.py -t targets.txt -l login.txt -p passwords.txt ssh:22
     - Attempts credentials on SSH, port 22, against all IPv4 addresses within targets.txt
 ```
 
-Check out the [Chameleon's wiki](https://github.com/parkerswierzewski/Chameleon/wiki) page if you're still confused.
+Check out the [Chameleon's wiki](https://github.com/parkerswierzewski/Chameleon/wiki) page if you're still confused. 
+There are also more examples of command usage on the wiki!
 
 Updates
 --------------
