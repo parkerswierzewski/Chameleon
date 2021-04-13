@@ -11,6 +11,7 @@ A Python Password Sprayer
    - [Required Arguments](#required-arguments)
    - [Optional Arguments](#optional-arguments)
    - [Examples](#examples)
+ - [Updates](#updates)
  - [Future Updates](#future-updates)
 
 ## Disclaimer
