@@ -40,6 +40,7 @@ order. On the network, it’ll just look like a user incorrectly entered their u
 Make sure you have GIT and PIP installed on the system!
 ```
 git clone https://github.com/parkerswierzewski/Chameleon.git
+cd Chameleon
 pip install -r requirements.txt
 python3 chameleon.py -h
 ```
@@ -85,11 +86,15 @@ python3 chameleon.py -t targets.txt -l login.txt -p passwords.txt ssh:22
 
 Check out the [Chameleon's wiki](https://github.com/parkerswierzewski/Chameleon/wiki) page if you're still confused.
 
+Updates
+--------------
+ - [x] Support for users choosing thread count.
+ - [x] Slightly improved connection handling.
+
 Future Updates
 --------------
  - [ ] Support for IPv6 addresses and hostnames.
  - [ ] Support for more protocols (FTP, MySQL, SMTP, etc.).
- - [x] Support for users choosing thread count.
  - [ ] Improve connection handling.
  - [ ] Improve argument parsing (user friendly).
  - [ ] Bug fixing
