@@ -55,7 +55,7 @@ PASSWORD = ""   # A file with a list of potential passwords.
 PROTOCOL = ""   # The protocol being attacked.
 SERVER = ""     # The IPv4 address range.
 TARGETS = ""    # A file with a list of targets.
-PORT = 0        # The port number of the server.
+PORT = 22        # The port number of the server (22 by default).
 THREADS = 20    # The amount of threads created (20 by default).
 VERBOSE = False # Whether or not to enable verbose (True = On).
 
@@ -212,7 +212,17 @@ if __name__ == "__main__":
     if PROTOCOL.lower() != "ssh":
         print("[!] The protocol you entered is not currently supported.\n")
         exit(1)
+
+    # Will prevent users from entering strings or invalid port numbers.
+    try:
+        PORT = int(PORT)
+        if PORT < 0 or PORT > 65535:
+            raise ValueError
+    except ValueError as ve:
+        print("[!] {} is not a valid port number.\n".format(PORT))
+        exit(1)
     
+    # Assigns thread count.
     if args.threads is not None:
         THREADS = args.threads
 
