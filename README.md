@@ -28,6 +28,7 @@ it [here](https://github.com/vanhauser-thc/thc-hydra)).
 
 Currently Chameleon only supports the following protocols:
 - SSH
+- FTP
 
 What is Password Spraying?
 --------------------------
@@ -85,18 +86,19 @@ python3 chameleon.py -t targets.txt -l login.txt -p passwords.txt ssh:22
     - Attempts credentials on SSH, port 22, against all IPv4 addresses within targets.txt
 ```
 
-Check out the [Chameleon's wiki](https://github.com/parkerswierzewski/Chameleon/wiki) page if you're still confused. 
+Check out [Chameleon's wiki](https://github.com/parkerswierzewski/Chameleon/wiki) page if you're still confused. 
 There are also more examples of command usage on the wiki!
 
 Updates
 --------------
  - [x] Support for users choosing thread count.
  - [x] Slightly improved connection handling.
+ - [x] FTP added as a supported protocol.
 
 Future Updates
 --------------
  - [ ] Support for IPv6 addresses and hostnames.
- - [ ] Support for more protocols (FTP, MySQL, SMTP, etc.).
+ - [ ] Support for more protocols (MySQL, SMTP, SMB, and more).
  - [ ] Improve connection handling.
  - [ ] Improve argument parsing (user friendly).
  - [ ] Bug fixing
